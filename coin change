@@ -1,7 +1,7 @@
 
 class Solution {
-    //top down
-    public int coinChange(int[] coins, int amount) {
+    
+    public int coinChange1(int[] coins, int amount) {
         if(coins == null || coins.length == 0) return -1;
         int[][] dp = new int[coins.length][amount + 1];
         int big = Integer.MAX_VALUE - 1;
@@ -17,5 +17,17 @@ class Solution {
             }
         }
         return dp[coins.length - 1][amount] == big ? -1 : dp[coins.length - 1][amount];
+    }
+   
+    public int coinChange2(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE - 1);
+        dp[0] = 0;
+        for(int coin : coins){
+            for(int i = coin; i <= amount; i++){
+                dp[i] = Math.min(1 + dp[i - coin], dp[i]); 
+            }
+        }
+        return dp[amount] == Integer.MAX_VALUE - 1 ? -1 : dp[amount];
     }
 }
