@@ -1,0 +1,29 @@
+class Solution {
+
+    public int change1(int amount, int[] coins) {
+        int[][] res = new int[coins.length+1][amount+1];
+        for(int i=0;i<res.length;i++){
+            res[i][0] = 1;
+        }
+        for(int i=1;i<res.length;i++){
+            for(int j=1;j<res[0].length;j++){
+                if(coins[i-1]>j){
+                    res[i][j] = res[i-1][j];
+                } else{
+                    res[i][j] = res[i-1][j] + res[i][j-coins[i-1]];
+                }
+            }
+        }
+        return res[coins.length][amount];
+    }
+    
+    public int change2(int amount, int[] coins) {
+        int[] dp = new int[amount + 1];
+        dp[0] = 1;
+        for(int coin : coins){
+            for(int i = coin; i <= amount; i++){
+                dp[i] += dp[i - coin];
+            }
+        }
+        return dp[amount];
+}
