@@ -1,0 +1,35 @@
+class Solution {
+    public int numDecodings(String s) {       //  1. Recursion  Time:O(2^n) Space:O(n)
+        if(s == null || s.length() == 0) return 0;
+        return helper(s.toCharArray(), 0);
+    }
+    public int helper(char[] array, int start){
+        if(start == array.length) return 1;
+        int ways = 0;
+        if(array[start] != '0') ways += helper(array, start + 1);       // 1-9
+        if(isValid(array, start)) ways += helper(array, start + 2);     // 10-26
+        return ways;
+    }
+    public boolean isValid(char[] array, int start){
+        if(start + 1 >= array.length) return false;
+        if(array[start] == '1') return true;
+        if(array[start] == '2' && array[start + 1] <= '6') return true;
+        return false;
+    }
+}
+
+class Solution {          // DP 
+    public int numDecodings(String s) {   // Time:O(n) Space:O(n)
+        if(s == null || s.length() == 0) return 0;
+        int[] dp = new int[s.length() + 1];
+        dp[0] = 1;  
+        dp[1] = s.charAt(0) == '0' ? 0 : 1;   // s starts with 0 ?
+        for(int i = 2; i < dp.length; i++){
+            int first = Integer.parseInt(s.substring(i - 1,i));
+            int second = Integer.parseInt(s.substring(i - 2,i));
+            if(first >= 1 && first <= 9) dp[i] += dp[i - 1];
+            if(second >= 10 && second <= 26) dp[i] += dp[i - 2];
+        }
+        return dp[s.length()];
+    }
+}
